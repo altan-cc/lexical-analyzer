@@ -1,0 +1,19 @@
+Source Program:
+
+begin
+    x := 123456;
+end .
+
+Lexeme Table:
+
+lexeme token type
+begin   20
+x       2
+:=      19
+123456  Number too long
+;       17
+end     21
+.       18
+Token List:
+
+20 2 x 19 1 17 21 18

@@ -1,0 +1,32 @@
+Source Program:
+
+var x , y ;
+begin
+y := 3;
+x := y + 56;
+end .
+
+Lexeme Table:
+
+lexeme token type
+var     29
+x       2
+,       16
+y       2
+;       17
+begin   20
+y       2
+:=      19
+3       3
+;       17
+x       2
+:=      19
+y       2
++       4 
+56      3
+;       17
+end     21
+.       18
+Token List:
+
+29 2 x 16 2 y 17 20 2 y 19 3 3 17 2 x 19 2 y 4 3 56 17 21 18
