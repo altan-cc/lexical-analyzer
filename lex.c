@@ -331,7 +331,7 @@ int main(int argc, char* argv[]) {
         printf("%s\t%s\n", lexeme[i], pattern[i]);
     }
 
-    printf("Token List:\n");
+    printf("Token List:\n\n");
     for (int i = 0; i < count;i ++) {
         if (i) {
             printf(" ");
