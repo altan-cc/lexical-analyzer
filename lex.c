@@ -224,15 +224,20 @@ void scan(const char* src) {
         if (isalpha((unsigned char)* p)) {
             char buff[MAX_LEN];
             int i = 0;
+
+            // we continue until we get all of our alphanumeric characters
             while (isalnum((unsigned char)* p)) {
                 buff[i] = *p++;
                 i++;
             }
+
+            // we finish the string with a '\0' and check if the identifier has more than 11 characters
             buff[i] = '\0';
             if (i > 11) {
                 addToken(buff, "Identifier too long", skipsym, NULL);
             }
             else {
+                // if the identifier is a reserved word we look for it's token
                 int rw = checkReserved(buff);
                 if (rw) {
                     char num[8];
@@ -240,6 +245,7 @@ void scan(const char* src) {
                     addToken(buff, num, rw, NULL);
                 }
                 else {
+                    // otherwise we store it as an identifier token
                     addToken(buff, "2", identsym, buff);
                 }
             }
@@ -250,15 +256,20 @@ void scan(const char* src) {
         if (isdigit((unsigned char)*p)) {
             char buff[MAX_LEN];
             int i = 0;
+
+            // we iterate until we find all following numbers
             while (isdigit((unsigned char)*p)) {
                 buff[i]= *p++;
                 i++;
             }
-            buff[i]= '\0';
+
+            // we finish the string and check if the number is too long and has more than 5 digits
+            buff[i] = '\0';
             if (i>5) {
                 addToken(buff, "Number too long", skipsym, NULL);
             }
             else {
+                // we add the number as a number token
                 addToken(buff, "3", numbersym, buff);
             }
             continue;
@@ -267,9 +278,12 @@ void scan(const char* src) {
         // skip special symbols
         int len = 0, tok = specialSym(p, &len);
         if (tok) {
+            // special symbols have at most 2 characters, we allocate one more for '\0'
             char buff[3];
             strncpy(buff, p, len);
             buff[len] = '\0';
+
+            // we convert the symbol to a character number represenation and add it as a token
             char num[8];
             sprintf(num, "%d", tok);
             addToken(buff, num, tok, NULL);
@@ -285,15 +299,21 @@ void scan(const char* src) {
 }
 
 int main(int argc, char* argv[]) {
+    // we close the program if it doesn't have exactly 2 args. 
+    // the first argument is always the name of the program.
     if (argc != 2) {
         fprintf(stderr, "Usage: %s sourcefile\n", argv[0]);
         return 1;
     }
+
+    // we open the file provided in the first argument in read mode
     FILE* f = fopen(argv[1],"r");
     if (!f) {
         perror("fopen");
         return 1;
     }
+
+    // we allocate some memory to store our program's text so we can print it
     char* src = malloc(100000);
     size_t n = fread(src, 1, 100000-1, f);
     src[n]='\0';
@@ -301,8 +321,10 @@ int main(int argc, char* argv[]) {
 
     printf("Source Program:\n\n%s\n\n", src);
 
+    // all the tokenizing happens here
     scan(src);
 
+    // print all output formatted as stated in the assignment
     printf("Lexeme Table:\n\n");
     printf("lexeme\ttoken type\n");
     for (int i = 0; i < count; i++) {
